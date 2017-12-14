@@ -1,0 +1,16 @@
+# gitlab common vars
+gitlab_fqdn: http://gitlab.domain.example.com
+
+# gitlab ad vars
+# http://doc.gitlab.com/ee/integration/ldap.html
+gitlab_ad: False
+gitlab_ad_host: dc1.domain.example.com
+gitlab_ad_port: 389
+gitlab_ad_uid: sAMAccountName
+gitlab_ad_method: plain # or tls or ssl
+gitlab_ad_bind_dn: cn=Administrator,ou=Users,dc=domain,dc=example,dc=com
+gitlab_ad_password: password
+gitlab_ad_allow_username_or_email_login: false
+gitlab_ad_block_auto_created_users: false
+gitlab_ad_base: ou=GIT,dc=domain,dc=example,dc=com
+gitlab_ad_user_filter: ''
