@@ -1,0 +1,11 @@
+---
+- name: Install Java
+  sudo: yes
+  apt: pkg=default-jre state=latest
+
+- name: Adding JAVA_HOME
+  lineinfile: dest=/etc/environment line='export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java' insertafter='EOF' state=present
+
+- name: Refresh profile
+  sudo: no
+  shell: . /etc/environment

@@ -1,0 +1,13 @@
+---
+server:
+    install: '1'
+    packages: [vim, git]
+    timezone: Europe/Brussels
+    locale: en_US.UTF-8
+vagrant_local:
+    install: '1'
+    vm: { base_box: trusty64, hostname: jenkins, ip: 192.168.33.12, memory: '1024', sharedfolder: ./, useVagrantCloud: '1', syncType: nfs }
+nginx:
+    install: '1'
+    docroot: /vagrant
+    servername: jenkins

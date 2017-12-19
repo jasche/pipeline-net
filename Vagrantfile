@@ -38,6 +38,13 @@ Vagrant.configure("2") do |config|
     jenkins.vm.network :private_network, ip: "192.168.33.12"
     jenkins.vm.network :forwarded_port, guest: 22, host: 10122, id: "ssh"
 
+    jenkins.vm.provision "ansible" do |ansible|
+       ansible.verbose = "v"
+       ansible.inventory_path="ansible/inventory"
+       ansible.playbook = "ansible/jenkins-playbook.yml"
+       ansible.sudo = true
+    end
+
 
     jenkins.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
