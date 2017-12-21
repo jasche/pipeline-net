@@ -14,3 +14,12 @@
 - name: Install Jenkins
   sudo: yes
   apt: pkg=jenkins state=latest
+  
+- name: Set initial password
+  copy:
+    src: roles/jenkins/files/initialAdminPassword
+    dest: /var/lib/jenkins/secrets/initialAdminPassword
+    owner: jenkins
+    group: jenkins
+    mode: 640
+

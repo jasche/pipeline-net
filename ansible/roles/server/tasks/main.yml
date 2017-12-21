@@ -11,11 +11,14 @@
     - wget
     - python-software-properties
 
-- name: Install Extra Packages
+- name: Install Vim
   sudo: yes
-  apt: pkg={{ item }} state=latest
-  with_items: server.packages
-  when: server.packages is defined
+  apt: pkg=vim state=latest
+
+- name: Install git
+  sudo: yes
+  apt: pkg=git state=latest
+
 
 - name: Configure the timezone
   sudo: yes

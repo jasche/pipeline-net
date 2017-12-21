@@ -1,10 +1,13 @@
 ---
+- name: Installing Java 8 Repo in Ubuntu
+  apt_repository: repo='ppa:openjdk-r/ppa'
+
 - name: Install Java
   sudo: yes
-  apt: pkg=default-jre state=latest
+  apt: pkg=openjdk-8-jdk state=latest
 
 - name: Adding JAVA_HOME
-  lineinfile: dest=/etc/environment line='export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java' insertafter='EOF' state=present
+  lineinfile: dest=/etc/environment line='export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java' insertafter='EOF' state=present
 
 - name: Refresh profile
   sudo: no
