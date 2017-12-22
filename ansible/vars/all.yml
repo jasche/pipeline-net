@@ -11,3 +11,6 @@ nginx:
     install: '1'
     docroot: /vagrant
     servername: jenkins
+jenkins:
+    admin_username: admin
+    admin_password: foobar    

@@ -7,12 +7,6 @@
 #    group: jenkins
 #    mode: 640
 #    when: jenkinsInstall.changed
-- name: Set initial password
-  copy:
-    src: roles/jenkins/files/initialAdminPassword
-    dest: /var/lib/jenkins/secrets/initialAdminPassword
-    owner: jenkins
-    group: jenkins
-    mode: 640
-    when: jenkinsInstall.changed
 
+- name:  Restart jenkins
+  service: name=jenkins enabled=yes state=restarted

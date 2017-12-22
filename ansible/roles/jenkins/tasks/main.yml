@@ -14,12 +14,33 @@
 - name: Install Jenkins
   sudo: yes
   apt: pkg=jenkins state=latest
-  
-- name: Set initial password
-  copy:
-    src: roles/jenkins/files/initialAdminPassword
-    dest: /var/lib/jenkins/secrets/initialAdminPassword
-    owner: jenkins
-    group: jenkins
-    mode: 640
+
+- name: Wait until Jenkins port opens
+  wait_for:
+    port: 80
+    delay: 60
+
+- name: Create initialization scripts directory
+  file: path=/var/lib/jenkins/init.groovy.d
+        state=directory
+        owner=jenkins
+        group=jenkins
+        mode=0775
+
+- name: Configure JVM Arguments
+  lineinfile:
+    dest: /etc/default/jenkins
+    regexp: '^JAVA_ARGS='
+    line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Djavax.net.ssl.trustStore=$JAVA_HOME/jre/lib/security/cacerts -Djavax.net.ssl.trustAnchors=$JAVA_HOME/jre/lib/security/cacerts"'
+
+- name: Install plugin
+  jenkins_plugin:
+    name: build-pipeline-plugin
+
+
+- name: Add initialization script to setup basic security
+  template: src=security.groovy.j2
+            dest=/var/lib/jenkins/init.groovy.d/security.groovy
+  notify: Restart jenkins
+
 

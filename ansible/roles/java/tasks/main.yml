@@ -7,7 +7,7 @@
   apt: pkg=openjdk-8-jdk state=latest
 
 - name: Adding JAVA_HOME
-  lineinfile: dest=/etc/environment line='export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java' insertafter='EOF' state=present
+  lineinfile: dest=/etc/environment line='export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' insertafter='EOF' state=present
 
 - name: Refresh profile
   sudo: no
