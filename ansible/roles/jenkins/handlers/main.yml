@@ -8,5 +8,17 @@
 #    mode: 640
 #    when: jenkinsInstall.changed
 
-- name:  Restart jenkins
-  service: name=jenkins enabled=yes state=restarted
+#- name:  Restart jenkins
+#  service: name=jenkins enabled=yes state=restarted
+#  notify: Wait for Jenkins to start to install plugins
+#
+#- name: Wait for Jenkins to start to install plugins
+#  wait_for:
+#    port: 80
+#    delay: 60
+#  notify: Install plugin
+#
+#- name: Install plugin
+#  jenkins_plugin:
+#    name: build-pipeline-plugin
+#

@@ -12,3 +12,8 @@
 - name: Refresh profile
   sudo: no
   shell: . /etc/environment
+
+- name: Add cacert (Fixing openjdk install bug)
+  copy: src=/etc/ssl/certs/java/cacerts
+            dest=/etc/ssl/certs/java/cacerts
+

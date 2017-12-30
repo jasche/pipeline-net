@@ -17,7 +17,7 @@
 
 - name: Wait until Jenkins port opens
   wait_for:
-    port: 80
+    port: 8080
     delay: 60
 
 - name: Create initialization scripts directory
@@ -33,14 +33,35 @@
     regexp: '^JAVA_ARGS='
     line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Djavax.net.ssl.trustStore=$JAVA_HOME/jre/lib/security/cacerts -Djavax.net.ssl.trustAnchors=$JAVA_HOME/jre/lib/security/cacerts"'
 
-- name: Install plugin
-  jenkins_plugin:
-    name: build-pipeline-plugin
-
 
 - name: Add initialization script to setup basic security
   template: src=security.groovy.j2
             dest=/var/lib/jenkins/init.groovy.d/security.groovy
-  notify: Restart jenkins
 
+- name:  Restart jenkins
+  service: name=jenkins enabled=yes state=restarted
+
+- name: Wait for Jenkins to start to install plugins
+  uri:
+    url: http://192.168.33.12:8080
+    status_code: 200
+    timeout: 5
+    user: admin
+    password: foobar
+    force_basic_auth: yes
+  register: jenkins_service_status
+  # Keep trying for 5 mins in 5 sec intervals
+  retries: 60
+  delay: 5
+  until: >
+     'status' in jenkins_service_status and
+     jenkins_service_status['status'] == 200
+
+- name: Install plugin
+  jenkins_plugin:
+    name: build-pipeline-plugin
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
 
