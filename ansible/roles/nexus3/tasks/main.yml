@@ -1,0 +1,49 @@
+- name: Download nexus_package 
+  get_url: url=http://sonatype-download.global.ssl.fastly.net/nexus/3/{{ nexus3.package }}  dest="/tmp/{{ nexus3.package }}"
+  tags: download
+  sudo: no
+
+- name: Ensure Nexus group exists
+  group: name="{{ nexus3.group }}" state=present
+  sudo: true
+
+- name: Ensure Nexus user exists
+  user: name="{{ nexus3.user }}" group="{{ nexus3.group }}" shell="{{ nexus3.shell }}" state=present
+  sudo: true
+
+- name: Ensure Nexus installation directory exists
+  file:
+    path="{{ nexus3.installation_dir }}"
+    state="directory"
+  sudo: true
+
+- name: Unpack Nexus download
+  unarchive:
+    src="/tmp/{{ nexus3.package }}"
+    dest="{{ nexus3.installation_dir }}"
+    creates="{{ nexus3.installation_dir }}/nexus-{{ nexus3.version }}"
+    force=no
+    copy=false
+    owner={{ nexus3.user }}
+    group={{ nexus3.group }}
+    mode="0755"
+  tags: unpack
+
+- name: Update symlink deamon hooks
+  file:
+    dest: '/etc/init.d/nexus'
+    src: "{{ nexus3.installation_dir }}/nexus-{{ nexus3.version }}/bin/nexus"
+    state: link
+  sudo: true
+
+- name: Nexus VM options
+  template: src=nexus.vmoptions.j2
+            dest="{{ nexus3.installation_dir }}/nexus-{{ nexus3.version }}/bin/nexus.vmoptions"
+
+- name: Register service
+  sudo: yes
+  shell: /usr/sbin/update-rc.d nexus defaults
+
+- service:
+    name: nexus
+    state: started

@@ -53,18 +53,26 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "nexus" do |nexus|
-    nexus.vm.box = "ubuntu/precise64"
-    nexus.vm.hostname = 'nexus'
+  config.vm.define "nexus3" do |nexus3|
+    nexus3.vm.box = "ubuntu/trusty64"
+    nexus3.vm.hostname = 'nexus3'
 #    nexus.vm.box_url = "ubuntu/precise64"
 
-    nexus.vm.network :private_network, ip: "192.168.33.13"
-    nexus.vm.network :forwarded_port, guest: 22, host: 10222, id: "ssh"
+    nexus3.vm.network :private_network, ip: "192.168.33.13"
+    nexus3.vm.network :forwarded_port, guest: 22, host: 10222, id: "ssh"
 
-    nexus.vm.provider :virtualbox do |v|
+    nexus3.vm.provision "ansible" do |ansible|
+       ansible.verbose = "v"
+       ansible.inventory_path="ansible/inventory"
+       ansible.playbook = "ansible/nexus3-playbook.yml"
+       ansible.sudo = true
+    end
+
+
+    nexus3.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-      v.customize ["modifyvm", :id, "--memory", 512]
-      v.customize ["modifyvm", :id, "--name", "nexus"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "nexus3"]
     end
   end
 end

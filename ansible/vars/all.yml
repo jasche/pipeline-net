@@ -14,3 +14,10 @@ nginx:
 jenkins:
     admin_username: admin
     admin_password: foobar    
+nexus3:
+    version: 3.0.2-02
+    package: nexus-3.0.2-02-unix.tar.gz
+    group: 'nexus'
+    user: 'nexus'
+    shell: '/bin/bash'
+    installation_dir: '/usr/share'
