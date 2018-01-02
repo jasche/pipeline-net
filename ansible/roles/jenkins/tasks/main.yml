@@ -58,11 +58,31 @@
      'status' in jenkins_service_status and
      jenkins_service_status['status'] == 200
 
-- name: Install plugin
+- name: Install multibranch pipeline plugin
   jenkins_plugin:
-    name: build-pipeline-plugin
+#    name: build-pipeline-plugin
+    name: workflow-multibranch
     url_username: admin
     url_password: foobar
     updates_url: http://pkg.jenkins.io/
     timeout: 180
+
+- name: Install git  plugin
+  jenkins_plugin:
+    name: git
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name: Install gitlab  plugin
+  jenkins_plugin:
+    name: gitlab-plugin
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name:  Restart jenkins after plugins
+  service: name=jenkins enabled=yes state=restarted
 
