@@ -21,3 +21,16 @@ nexus3:
     user: 'nexus'
     shell: '/bin/bash'
     installation_dir: '/usr/share'
+docker:
+    package: "docker-engine"
+    package_state: present
+
+# Docker Compose options.
+    install_compose: true
+    compose_version: "1.16.1"
+    compose_path: /usr/local/bin/docker-compose
+
+# Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
+    apt_release_channel: stable
+    apt_repository: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
+

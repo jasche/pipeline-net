@@ -75,4 +75,28 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--name", "nexus3"]
     end
   end
+
+  config.vm.define "docker" do |docker|
+    docker.vm.box = "ubuntu/trusty64"
+    docker.vm.hostname = 'docker'
+#    nexus.vm.box_url = "ubuntu/precise64"
+
+    docker.vm.network :private_network, ip: "192.168.33.14"
+    docker.vm.network :forwarded_port, guest: 22, host: 10222, id: "ssh"
+
+    docker.vm.provision "ansible" do |ansible|
+       ansible.verbose = "v"
+       ansible.inventory_path="ansible/inventory"
+       ansible.playbook = "ansible/docker-playbook.yml"
+       ansible.sudo = true
+    end
+
+
+    docker.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "docker"]
+    end
+  end
+
 end

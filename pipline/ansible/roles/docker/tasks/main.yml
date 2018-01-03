@@ -1,0 +1,50 @@
+---
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - docker
+    - docker-engine
+
+- name: Ensure depdencies are installed.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Add Docker apt key.
+  apt_key:
+    keyserver: hkp://p80.pool.sks-keyservers.net
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+    state: present
+  register: add_repository_key
+  ignore_errors: true
+
+- name: Ensure curl is present (on older systems without SNI).
+  package: name=curl state=present
+  when: add_repository_key|failed
+
+- name: Add Docker apt key (alternative for older systems without SNI).
+  shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+  args:
+    warn: no
+  when: add_repository_key|failed
+
+- name: Add Docker repository.
+  apt_repository:
+    repo: "{{ docker.apt_repository }}"
+    state: present
+    update_cache: yes
+
+- name: Install Docker.
+  package: name={{ docker.package }} state={{ docker.package_state }}
+
+- name: Ensure Docker is started and enabled at boot.
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
