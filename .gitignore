@@ -1,1 +1,8 @@
 .vagrant/
+spring-boot-sample-ant/target/
+spring-boot-sample-ant/bin/
+spring-boot-sample-ant/.classpath
+spring-boot-sample-ant/.project
+spring-boot-sample-ant/.settings/org.eclipse.core.resources.prefs
+spring-boot-sample-ant/.settings/org.eclipse.jdt.core.prefs
+
