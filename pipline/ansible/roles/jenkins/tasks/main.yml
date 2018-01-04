@@ -83,6 +83,15 @@
     updates_url: http://pkg.jenkins.io/
     timeout: 180
 
+- name: Install declarative pipeline plugin
+  jenkins_plugin:
+    name: pipeline-model-definition
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+
 - name:  Restart jenkins after plugins
   service: name=jenkins enabled=yes state=restarted
 
