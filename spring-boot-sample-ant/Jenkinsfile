@@ -9,7 +9,7 @@ pipeline {
           }
           stage('Second Stage') {
                steps {
-                    sh 'ant -v -Drevision=1.5.9.RELEASE'
+                    sh 'ant -v -Drevision=1.5.9.RELEASE -f spring-boot-sample-ant/build.xml'
                     echo 'Step 3. Third time Hello'
                }
           }
