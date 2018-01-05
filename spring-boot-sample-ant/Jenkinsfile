@@ -9,7 +9,7 @@ pipeline {
           }
           stage('Second Stage') {
                steps {
-                    echo 'Step 2. Second time Hello'
+                    sh 'ant -v -Drevision=1.5.9.RELEASE'
                     echo 'Step 3. Third time Hello'
                }
           }
