@@ -1,0 +1,56 @@
+---
+- name: check which version is installed
+  command: "{{ant.home}}/bin/ant -version | awk '/^Apache Ant/ {print $4}'"
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  register: ant_current_version
+
+- name: check if the new version should be installed or not
+  set_fact:
+    install_ant: "{{ ant_current_version.rc > 0 or (ant_current_version.stdout | version_compare(ant.version, '<'))}}"
+
+- block:
+  - name: download ant
+    get_url:
+      url: "http://archive.apache.org/dist/ant/binaries/apache-ant-{{ ant.version }}-bin.tar.gz"
+      dest: "/tmp/apache-ant-{{ ant.version }}-bin.tar.gz"
+      mode: 0644
+    when: install_ant
+
+  - name: create versions directory
+    file:
+      path: "{{ant.versions_dir}}"
+      state: directory
+      mode: 0755
+    when: install_ant
+
+  - name: extract archive with version {{ant_version}} to {{ant_versions_dir}}
+    unarchive:
+      copy: False
+      src: "/tmp/apache-ant-{{ ant.version }}-bin.tar.gz"
+      dest: "{{ant.versions_dir}}"
+      creates: "{{ant.versions_dir}}/apache-ant-{{ ant.version }}"
+    when: install_ant
+
+  - name: point {{ant.home}} to the currently installed version
+    file:
+      path: "{{ant.home}}"
+      src: "{{ant.versions_dir}}/apache-ant-{{ ant.version }}"
+      state: link
+      force: True
+    when: install_ant
+  always:
+  - name: delete downloaded files
+    file:
+      state: absent
+      path: "/tmp/apache-ant-{{ ant.version }}-bin.tar.gz"
+    when: install_ant
+
+  - name: Set ANT_HOME environment variable
+    lineinfile: dest=/etc/environment regexp='^ANT_HOME.*' line="ANT_HOME={{ant.home}}" insertbefore='^PATH.*'
+
+  - name: add {{ant.home}} to path
+    copy:
+      dest: /etc/profile.d/custom-path.sh
+      content: "PATH=$PATH:{{ant.home}}/bin"

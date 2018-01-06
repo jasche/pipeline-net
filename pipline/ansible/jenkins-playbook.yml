@@ -7,6 +7,9 @@
     - server
     - vagrant_local
     - nginx
+    - ant
+    - ivy
     - java
-    - jenkins
+    - docker
+#    - jenkins
     - app

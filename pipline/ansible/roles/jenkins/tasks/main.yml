@@ -58,6 +58,24 @@
      'status' in jenkins_service_status and
      jenkins_service_status['status'] == 200
 
+- name: Install pipeline plugin
+  jenkins_plugin:
+#    name: build-pipeline-plugin
+    name: workflow-aggregator
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name: Install build  pipeline plugin
+  jenkins_plugin:
+    name: build-pipeline-plugin
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+
 - name: Install multibranch pipeline plugin
   jenkins_plugin:
 #    name: build-pipeline-plugin
@@ -126,6 +144,30 @@
 - name: Install Docker common plugin
   jenkins_plugin:
     name: docker-commons
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name: Install jcloud plugin
+  jenkins_plugin:
+    name: jclouds-jenkins
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name: Install ssh agents plugin
+  jenkins_plugin:
+    name: ssh-slaves
+    url_username: admin 
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
+- name: Install slave setup plugin
+  jenkins_plugin:
+    name: slave-setup
     url_username: admin
     url_password: foobar
     updates_url: http://pkg.jenkins.io/

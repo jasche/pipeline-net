@@ -33,4 +33,10 @@ docker:
 # Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
     apt_release_channel: stable
     apt_repository: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
+ant:
+    home: /usr/local/apache-ant
+    version: 1.9.7
+    versions_dir: /usr/local/apache-ant-versions
 
+ivy:
+    version: 2.4.0
