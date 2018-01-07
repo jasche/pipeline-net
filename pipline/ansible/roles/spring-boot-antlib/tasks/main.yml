@@ -1,0 +1,19 @@
+---
+- name: check which version is installed
+  shell: "ls -1v {{ant.home}}/lib/spring-boot-antlib-*.jar | tail -1 | gawk 'match($0,/ivy-(.+)\\.jar/, group) {print group[1]}'"
+  changed_when: false
+  failed_when: false
+  check_mode: no
+  register: current_version
+
+- name: check if the new version should be installed or not
+  set_fact:
+    install_spring_boot_antlib: "{{ (current_version.rc > 0) or (current_version.stderr_lines | length > 0) or (current_version.stdout | version_compare(spring_boot_antlib.version, '<'))}}"
+
+- block:
+  - name: download
+    get_url:
+      url: "http://repo.spring.io/snapshot/org/springframework/boot/spring-boot-antlib/{{ spring_boot_antlib.version }}/spring-boot-antlib-{{ spring_boot_antlib.version }}.jar"
+      dest: "{{ant.home}}/lib"
+    when: install_spring_boot_antlib
+
