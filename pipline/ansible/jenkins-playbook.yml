@@ -12,5 +12,6 @@
     - spring-boot-antlib
     - java
     - docker
+    - docker-compose
     - jenkins
     - app

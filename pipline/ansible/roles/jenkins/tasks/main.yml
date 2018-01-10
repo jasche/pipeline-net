@@ -39,6 +39,11 @@
   template: src=security.groovy.j2
             dest=/var/lib/jenkins/init.groovy.d/security.groovy
 
+- name: Adding jenkins to docker group 
+  user: name=jenkins
+        groups=sudo
+        append=yes
+
 - name:  Restart jenkins
   service: name=jenkins enabled=yes state=restarted
 
@@ -172,6 +177,15 @@
     url_password: foobar
     updates_url: http://pkg.jenkins.io/
     timeout: 180
+
+- name: Install ansi clour plugin
+  jenkins_plugin:
+    name: ansicolor
+    url_username: admin
+    url_password: foobar
+    updates_url: http://pkg.jenkins.io/
+    timeout: 180
+
 
 
 - name:  Restart jenkins after plugins
